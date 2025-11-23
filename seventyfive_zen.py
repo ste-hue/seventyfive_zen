@@ -5,7 +5,6 @@ Do → See → Understand → Change → Repeat
 """
 import json
 import sys
-import os
 import termios
 import tty
 import time
@@ -150,16 +149,16 @@ def write_markdown_log(log_dir: Path, target_date: date, data: Dict[str, Any]):
         md_content += f"## {status} {loop_name}\n\n"
         
         if completed:
+            did = loop_data.get("did", "")
+            shift = loop_data.get("shift", "")
             edge = loop_data.get("edge")
-            surprise = loop_data.get("surprise", "")
-            understanding = loop_data.get("understanding_change", "")
             
-            if edge:
+            if did:
+                md_content += f"- Did: {did}\n"
+            if shift:
+                md_content += f"- Shift: {shift}\n"
+            if edge is not None:
                 md_content += f"- Edge: {edge}/10\n"
-            if surprise:
-                md_content += f"- Surprise: {surprise}\n"
-            if understanding:
-                md_content += f"- Understanding: {understanding}\n"
             md_content += "\n"
     
     # Insight
@@ -370,26 +369,22 @@ def display_interactive(log_dir: Path):
                     del data["timer_start"]
                     del data["timer_loop"]
                 
-                edge_input = prompt_input("Edge/difficulty (1-10)", "5")
+                edge_input = prompt_input("Edge/difficulty (1-10, optional)", "")
                 try:
-                    edge = int(edge_input) if edge_input else 5
-                    if 1 <= edge <= 10:
+                    edge = int(edge_input) if edge_input else None
+                    if edge is not None and 1 <= edge <= 10:
                         loop_data["edge"] = edge
                 except ValueError:
-                    loop_data["edge"] = 5
+                    pass
                 
-                # Use custom questions if available
-                custom_q = loop_info.get("questions", {})
+                # Simplified Naval core: did → shift → edge
+                did = prompt_input("What did you actually do?")
+                if did:
+                    loop_data["did"] = did
                 
-                surprise_prompt = custom_q.get("surprise", "What surprised you?")
-                surprise = prompt_input(surprise_prompt)
-                if surprise:
-                    loop_data["surprise"] = surprise
-                
-                understanding_prompt = custom_q.get("understanding", "What changed in your understanding?")
-                understanding = prompt_input(understanding_prompt)
-                if understanding:
-                    loop_data["understanding_change"] = understanding
+                shift = prompt_input("What shifted in your understanding?")
+                if shift:
+                    loop_data["shift"] = shift
                 
                 loop_data["completed"] = True
                 data["loops"][loop_name] = loop_data
@@ -398,19 +393,15 @@ def display_interactive(log_dir: Path):
             if not insight.get("learning"):
                 print(f"\n\n{Colors.BOLD}INSIGHT - Knowledge Extraction{Colors.ENDC}\n")
                 
-                learning = prompt_input("What did you learn today?")
+                learning = prompt_input("What did you learn today that wasn't obvious before?")
                 if learning:
                     if "insight" not in data:
                         data["insight"] = {}
                     data["insight"]["learning"] = learning
                     
-                    tiny_change = prompt_input("What small change for tomorrow?")
+                    tiny_change = prompt_input("What small change will you apply tomorrow?")
                     if tiny_change:
                         data["insight"]["tiny_change"] = tiny_change
-                    
-                    belief = prompt_input("What belief did you update?")
-                    if belief:
-                        data["insight"]["belief_update"] = belief
                     
                     save_day_data(log_dir, today, data)
         elif key == 'v' or key == 'V':
@@ -489,15 +480,15 @@ def view_details(log_dir: Path, target_date: date):
         loop_data = loops.get(loop_name, {})
         if loop_data.get("completed"):
             print(f"{Colors.BOLD}{loop_name}:{Colors.ENDC}")
+            did = loop_data.get("did")
+            if did:
+                print(f"  Did: {did}")
+            shift = loop_data.get("shift")
+            if shift:
+                print(f"  Shift: {shift}")
             edge = loop_data.get("edge")
-            if edge:
+            if edge is not None:
                 print(f"  Edge: {edge}/10")
-            surprise = loop_data.get("surprise")
-            if surprise:
-                print(f"  Surprise: {surprise}")
-            understanding = loop_data.get("understanding_change")
-            if understanding:
-                print(f"  Understanding: {understanding}")
             print()
     
     insight = data.get("insight", {})
