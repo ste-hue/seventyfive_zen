@@ -354,6 +354,21 @@ def display_interactive(log_dir: Path):
             
             if "loops" not in data:
                 data["loops"] = {}
+                
+            # Stop timer if running for this loop (regardless of completion status)
+            if "timer_start" in data and data.get("timer_loop") == loop_name:
+                start_time = datetime.fromisoformat(data["timer_start"])
+                duration = int((datetime.now() - start_time).total_seconds() / 60)
+                print(f"\n{Colors.GREEN}Timer stopped: {duration} minutes{Colors.ENDC}")
+                # Store duration to be added to the session
+                current_duration = duration
+                # Clear timer
+                del data["timer_start"]
+                del data["timer_loop"]
+                save_day_data(log_dir, today, data)
+                time.sleep(1)
+            else:
+                current_duration = 0
             
             # Support multiple sessions - keep old structure but allow re-doing
             loop_data = data["loops"].get(loop_name, {})
