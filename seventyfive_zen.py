@@ -195,7 +195,11 @@ def getch() -> str:
         return ch
     except:
         # Fallback for non-terminal environments
-        return input().strip()[0] if sys.stdin.isatty() else 'q'
+        if sys.stdin.isatty():
+            user_input = input().strip()
+            return user_input[0] if user_input else 'q'
+        else:
+            return 'q'
 
 
 def prompt_input(prompt: str, default: str = "") -> str:
@@ -351,7 +355,36 @@ def display_interactive(log_dir: Path):
             if "loops" not in data:
                 data["loops"] = {}
             
+            # Support multiple sessions - keep old structure but allow re-doing
             loop_data = data["loops"].get(loop_name, {})
+            
+            # If already completed, ask if they want to do another session
+            if loop_data.get("completed"):
+                print(f"\n{Colors.YELLOW}Already completed {loop_name} today.{Colors.ENDC}")
+                another = prompt_input("Do another session? (y/n)", "n")
+                if another.lower() != 'y':
+                    continue
+                # Store previous session and start fresh
+                if "sessions" not in loop_data:
+                    # Convert first session to array
+                    first_session = {
+                        "did": loop_data.get("did"),
+                        "shift": loop_data.get("shift"),
+                        "edge": loop_data.get("edge"),
+                        "duration_min": loop_data.get("duration_min")
+                    }
+                    loop_data["sessions"] = [first_session]
+                else:
+                    # Add current to sessions
+                    current_session = {
+                        "did": loop_data.get("did"),
+                        "shift": loop_data.get("shift"), 
+                        "edge": loop_data.get("edge"),
+                        "duration_min": loop_data.get("duration_min")
+                    }
+                    loop_data["sessions"].append(current_session)
+                # Clear for new session
+                loop_data = {"completed": False, "sessions": loop_data["sessions"]}
             
             if not loop_data.get("completed"):
                 loop_info = LOOP_INFO[loop_name]
