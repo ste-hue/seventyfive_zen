@@ -1,88 +1,112 @@
-# seventyfive_zen (75z)
+# 75z
 
-**Interactive knowledge iteration engine.**
+**Ultraminimal daily tracker. No gates. No enforcement. Just clarity.**
 
-Do → See → Understand → Change → Repeat
+---
 
-## Quick Start
+## The Principle
 
+Assumed outcome  
+→ Attention bias  
+→ Language consistency  
+→ Repeated action  
+→ Compounded probability  
+→ Result
+
+**You don't get what you want.**  
+**You get what you no longer internally debate.**
+
+- Nothing "manifests" for the indecisive.
+- The universe doesn't reward desire.
+- It responds to clarity + coherence + time.
+
+**Process:**
+1. Name the outcome precisely
+2. Assume it as inevitable
+3. Eliminate internal counter-speech
+4. Act without emotional urgency
+5. Outlast your own doubt
+
+Decide. Remove doubt. Act consistently. Detach from timing. Persist.
+
+---
+
+## Installation
+
+```bash
+# Add alias to your shell
+echo 'alias 75z="python3 ~/path/to/seventyfive_zen.py"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+---
+
+## Usage
+
+### Morning (Set state)
 ```bash
 75z
 ```
+Enter:
+- State (1-10)
+- Focus today (one line)
 
-Then just press numbers!
+### Evening (Close loop)
+```bash
+75z
+```
+Enter:
+- What I did (concrete)
+- What shifted (concrete)
+- Tomorrow (one action)
 
-## Interactive Commands
+### View
+```bash
+75z
+```
+Shows today if complete.
 
-**`1`** - Complete BUILD (60-90m)
-**`2`** - Complete BODY (20-30m)  
-**`3`** - Complete SYSTEM (10-15m)
-**`4`** - Add INSIGHT (5-10m)
+---
 
-**`t`** - Start timer for a loop
-**`i`** - Info about what each loop means
-**`v`** - View today's details
-**`p`** - View past 7 days
-**`s`** - Set intention (if not set)
-**`q`** - Quit
+## Files Generated
 
-## The Loops
+```
+~/75z_logs/YYYY-MM-DD.json  # Raw data
+~/75z_logs/YYYY-MM-DD.md    # Human readable
+```
 
-### BUILD (60-90m)
-Deep work on your main project (CM3070/HotelOPS)
-- What are you building?
-- What's the hardest part?
-- What will you ship today?
+### Example Log
 
-### BODY (20-30m)
-Physical training - push/dips/KB/walk
-- What exercise?
-- How many reps/duration?
-- How do you feel?
+```markdown
+# 2025-12-12
 
-### SYSTEM (10-15m)
-Simplify one thing - file/config/process
-- What needs simplifying?
-- What can you delete?
-- How to make it cleaner?
+**State:** 7/10
+**Focus:** Complete prototype section
 
-### INSIGHT (5-10m)
-Extract today's learning
-- What did you learn?
-- What tiny change for tomorrow?
-- What belief updated?
+**Did:** Removed AI components, wrote 3 pages
+**Shifted:** System is now fully traceable
 
-## Features
+**Tomorrow:** Review architecture match
+```
 
-- **Visual progress bar** - see completion at a glance
-- **Timers** - track how long each loop takes
-- **Edge tracking** - difficulty levels 1-10
-- **Surprise capture** - what was unexpected?
-- **Insight forwarding** - yesterday's learning → today's action
-- **No manual editing** - everything through the interface
+---
 
-## Workflow
+## Daily Alignment
 
-1. Run `75z`
-2. Press `s` to set intention (first time)
-3. Press `t` → `1` to start BUILD timer
-4. Do deep work for 60-90m
-5. Press `1` to complete BUILD (timer stops automatically)
-6. Answer the prompts (edge, surprise, understanding)
-7. Repeat for BODY (`2`) and SYSTEM (`3`)
-8. Press `4` at end of day for insight
-9. Tomorrow: yesterday's insight appears automatically
+See `ALIGNMENT.md` for the daily prayer/journal entry.
 
-## Data Storage
+No frameworks. No references. Just return to center.
 
-- `~/75z_logs/YYYY-MM-DD.json` - Machine data
-- `~/75z_logs/YYYY-MM-DD.md` - Human readable
+---
 
-## Philosophy
+## That's It
 
-Every interaction reinforces:
-- "I am someone who learns every day"
-- "I am someone who iterates"
-- "I am someone who sharpens craft"
+- No loops
+- No gates  
+- No enforcement
+- No timers
+- No progress bars
 
-Not: "I checked a box"
+Just: State → Focus → Did → Shifted → Tomorrow
+
+**Five fields. One cycle. Done.**
