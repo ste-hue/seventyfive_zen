@@ -416,14 +416,17 @@ def display_interactive(log_dir: Path):
             print("\n")
             break
         elif key == "s" or key == "S":
-            if not intention:
+            current_intention = data.get("intention", "")
+            if not current_intention:
                 print("\n")
-                intention = prompt_input("What is your intention today? (inner state)")
-                if intention:
+                intention_text = prompt_input(
+                    "What is your intention today? (inner state)"
+                )
+                if intention_text:
                     # GATE 1: State coherence check when setting intention
                     is_coherent, coherence_score = gate_1_state_coherence()
                     if is_coherent:
-                        data["intention"] = intention
+                        data["intention"] = intention_text
                         data["day_number"] = day_num
                         data["state_coherence_checked"] = True
                         data["state_coherence_score"] = coherence_score
@@ -667,13 +670,10 @@ def display_interactive(log_dir: Path):
             print("This will clear all loops and insights for today.")
             confirm = prompt_input("Type 'yes' to confirm")
             if confirm.lower() == "yes":
-                # Keep intention but clear loops and enforcement flags
+                # Clear everything including intention
                 new_data = {
                     "date": today.isoformat(),
                     "day_number": day_num,
-                    "intention": data.get("intention", ""),
-                    "state_coherence_checked": False,
-                    "daily_coherence_checked": False,
                 }
                 save_day_data(log_dir, today, new_data)
                 print(f"\n{Colors.GREEN}Today's progress reset{Colors.ENDC}")
