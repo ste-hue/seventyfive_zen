@@ -66,6 +66,13 @@ def gate_1_state_coherence() -> tuple[bool, int]:
 
     coherence_input = prompt_input("State clarity")
 
+    # Debug: strip whitespace and check what we got
+    coherence_input = coherence_input.strip()
+
+    if not coherence_input:
+        print(f"\n{Colors.RED}No input received. Please enter a number.{Colors.ENDC}")
+        return False, 0
+
     try:
         coherence = int(coherence_input)
         if coherence < 1 or coherence > 10:
