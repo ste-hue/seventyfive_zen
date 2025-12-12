@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-75z Minimal - Ultraminimal daily alignment tracker
-No gates. No enforcement. Just clarity.
+75z - Alignment Journaling OS
+You are not journaling to remember. You are journaling to become inevitable.
 """
 
 import json
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 DEFAULT_LOG_DIR = Path.home() / "75z_logs"
@@ -15,10 +15,11 @@ def clear():
     print("\033[2J\033[H", end="")
 
 
-def load_today():
+def load_log(target_date):
+    """Load log for a specific date"""
     log_dir = Path(DEFAULT_LOG_DIR)
     log_dir.mkdir(parents=True, exist_ok=True)
-    log_path = log_dir / f"{date.today().isoformat()}.json"
+    log_path = log_dir / f"{target_date.isoformat()}.json"
 
     if log_path.exists():
         with open(log_path, "r") as f:
@@ -26,81 +27,208 @@ def load_today():
     return {}
 
 
-def save_today(data):
+def save_log(target_date, data):
+    """Save log with markdown mirror"""
     log_dir = Path(DEFAULT_LOG_DIR)
     log_dir.mkdir(parents=True, exist_ok=True)
-    log_path = log_dir / f"{date.today().isoformat()}.json"
+    log_path = log_dir / f"{target_date.isoformat()}.json"
 
-    data["date"] = date.today().isoformat()
+    data["date"] = target_date.isoformat()
 
     with open(log_path, "w") as f:
         json.dump(data, f, indent=2)
 
-    # Write markdown
-    md_path = log_dir / f"{date.today().isoformat()}.md"
-    md = f"# {date.today().isoformat()}\n\n"
+    # Write markdown mirror
+    md_path = log_dir / f"{target_date.isoformat()}.md"
+    md = f"# {target_date.isoformat()}\n\n"
 
-    if "state" in data:
-        md += f"**State:** {data['state']}/10\n"
-    if "focus" in data:
-        md += f"**Focus:** {data['focus']}\n\n"
-
-    if "did" in data:
-        md += f"**Did:** {data['did']}\n"
-    if "shifted" in data:
-        md += f"**Shifted:** {data['shifted']}\n\n"
-
+    if "result" in data:
+        md += f"**RESULT:** {data['result']}\n\n"
+    if "attention" in data:
+        md += f"**ATTENTION HELD:** {data['attention']}\n"
+    if "drift" in data and data["drift"]:
+        md += f"**DRIFT:** {data['drift']}\n"
     if "tomorrow" in data:
-        md += f"**Tomorrow:** {data['tomorrow']}\n"
+        md += f"\n**TOMORROW LOCK:** {data['tomorrow']}\n"
 
     md_path.write_text(md)
 
 
-def main():
+def show_alignment():
+    """Read ALIGNMENT.md if it exists"""
+    alignment_path = Path(__file__).parent / "ALIGNMENT.md"
+    if alignment_path.exists():
+        print(alignment_path.read_text())
+        print("\n" + "─" * 60 + "\n")
+        input("Press Enter to continue...")
+
+
+def reconcile():
+    """Evening reconciliation - the core writing surface"""
     clear()
+    print("RECONCILIATION\n")
 
-    print("75z minimal\n")
+    data = load_log(date.today())
 
-    data = load_today()
+    print("RESULT (1 sentence, concrete):")
+    result = input("→ ").strip()
 
-    # Morning
-    if "state" not in data:
-        print("Morning check:")
-        state = input("State (1-10): ").strip()
-        focus = input("Focus today: ").strip()
-
-        data["state"] = state
-        data["focus"] = focus
-        save_today(data)
-
-        print("\n✓ Set\n")
+    if not result:
+        print("\nNo result captured.\n")
         return
 
-    # Evening
-    if "did" not in data:
-        print(f"State: {data.get('state', '?')}/10")
-        print(f"Focus: {data.get('focus', '')}\n")
-        print("Evening review:")
+    print("\nWHERE ATTENTION HELD (1 sentence):")
+    attention = input("→ ").strip()
 
-        did = input("What I did: ").strip()
-        shifted = input("What shifted: ").strip()
-        tomorrow = input("Tomorrow: ").strip()
+    print("\nWHERE IT DRIFTED (optional, leave blank if none):")
+    drift = input("→ ").strip()
 
-        data["did"] = did
-        data["shifted"] = shifted
-        data["tomorrow"] = tomorrow
-        save_today(data)
+    print("\nTOMORROW LOCK (1 unavoidable action):")
+    tomorrow = input("→ ").strip()
 
-        print("\n✓ Done\n")
+    data["result"] = result
+    data["attention"] = attention
+    data["drift"] = drift if drift else None
+    data["tomorrow"] = tomorrow
+
+    save_log(date.today(), data)
+
+    print("\n✓ Reconciled\n")
+
+
+def view_today():
+    """Mirror - reinforces identity"""
+    clear()
+    data = load_log(date.today())
+
+    if not data.get("result"):
+        print("TODAY\n")
+        print("Not yet reconciled.\n")
+        print("Press 4 to reconcile.\n")
         return
 
-    # Already complete
-    print(f"State: {data.get('state', '?')}/10")
-    print(f"Focus: {data.get('focus', '')}\n")
-    print(f"Did: {data.get('did', '')}")
-    print(f"Shifted: {data.get('shifted', '')}\n")
-    print(f"Tomorrow: {data.get('tomorrow', '')}\n")
-    print("✓ Today complete\n")
+    print("MIRROR\n")
+    print(f"RESULT: {data.get('result', '')}\n")
+    print(f"ATTENTION: {data.get('attention', '')}")
+
+    if data.get("drift"):
+        print(f"DRIFT: {data.get('drift', '')}")
+
+    print(f"\nTOMORROW LOCK: {data.get('tomorrow', '')}\n")
+
+    input("Press Enter to continue...")
+
+
+def view_past():
+    """Pattern detection by proximity - read only"""
+    clear()
+    log_dir = Path(DEFAULT_LOG_DIR)
+
+    if not log_dir.exists():
+        print("No logs yet.\n")
+        input("Press Enter to continue...")
+        return
+
+    logs = sorted([p for p in log_dir.glob("*.json")], reverse=True)[:7]
+
+    print("PAST 7 DAYS\n")
+
+    for log_path in logs:
+        try:
+            log_date = date.fromisoformat(log_path.stem)
+            data = load_log(log_date)
+
+            result = data.get("result", "—")
+            tomorrow = data.get("tomorrow", "—")
+
+            print(f"{log_date.isoformat()}")
+            print(f"  Result: {result[:60]}{'...' if len(result) > 60 else ''}")
+            print(f"  Lock: {tomorrow[:60]}{'...' if len(tomorrow) > 60 else ''}")
+
+            if data.get("drift"):
+                print(
+                    f"  Drift: {data['drift'][:60]}{'...' if len(data['drift']) > 60 else ''}"
+                )
+            print()
+        except:
+            continue
+
+    input("Press Enter to continue...")
+
+
+def reset_today():
+    """State correction, not failure"""
+    clear()
+    print("RESET\n")
+    print("Delete today's log and start clean?\n")
+    confirm = input("Type 'yes' to confirm: ").strip()
+
+    if confirm.lower() == "yes":
+        log_path = Path(DEFAULT_LOG_DIR) / f"{date.today().isoformat()}.json"
+        md_path = Path(DEFAULT_LOG_DIR) / f"{date.today().isoformat()}.md"
+
+        if log_path.exists():
+            log_path.unlink()
+        if md_path.exists():
+            md_path.unlink()
+
+        print("\n✓ Reset complete\n")
+        print("Re-read ALIGNMENT.md to reset state.\n")
+    else:
+        print("\nCancelled.\n")
+
+    input("Press Enter to continue...")
+
+
+def show_info():
+    """Minimal info - no explanation of the OS"""
+    clear()
+    print("75z - ALIGNMENT JOURNALING OS\n")
+    print("Commands:")
+    print("  a - Read ALIGNMENT.md (morning)")
+    print("  4 - Reconcile (evening)")
+    print("  v - View today (mirror)")
+    print("  p - Past 7 days (patterns)")
+    print("  r - Reset today")
+    print("  i - Info (this screen)")
+    print("  q - Quit\n")
+    input("Press Enter to continue...")
+
+
+def main():
+    """Main loop - minimal surface"""
+    while True:
+        clear()
+
+        data = load_log(date.today())
+        reconciled = bool(data.get("result"))
+
+        print("75z\n")
+
+        if reconciled:
+            print(f"Today: ✓ Reconciled\n")
+        else:
+            print(f"Today: Not yet reconciled\n")
+
+        print("Commands: a 4 v p r i q\n")
+        cmd = input("> ").strip().lower()
+
+        if cmd == "q":
+            break
+        elif cmd == "a":
+            show_alignment()
+        elif cmd == "4":
+            reconcile()
+        elif cmd == "v":
+            view_today()
+        elif cmd == "p":
+            view_past()
+        elif cmd == "r":
+            reset_today()
+        elif cmd == "i":
+            show_info()
+        else:
+            continue
 
 
 if __name__ == "__main__":

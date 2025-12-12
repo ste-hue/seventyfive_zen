@@ -1,6 +1,6 @@
-# 75z
+# 75z — Alignment Journaling OS
 
-**Ultraminimal daily tracker. No gates. No enforcement. Just clarity.**
+**You are not journaling to remember. You are journaling to become inevitable.**
 
 ---
 
@@ -16,11 +16,6 @@ Assumed outcome
 **You don't get what you want.**  
 **You get what you no longer internally debate.**
 
-- Nothing "manifests" for the indecisive.
-- The universe doesn't reward desire.
-- It responds to clarity + coherence + time.
-
-**Process:**
 1. Name the outcome precisely
 2. Assume it as inevitable
 3. Eliminate internal counter-speech
@@ -43,28 +38,116 @@ source ~/.zshrc
 
 ## Usage
 
-### Morning (Set state)
-```bash
-75z
-```
-Enter:
-- State (1-10)
-- Focus today (one line)
+### Morning: Read ALIGNMENT.md
 
-### Evening (Close loop)
 ```bash
 75z
+> a
 ```
-Enter:
-- What I did (concrete)
-- What shifted (concrete)
-- Tomorrow (one action)
 
-### View
+This is your state setter. Read it once. Don't edit daily.
+
+You're not "motivating" — you're declaring identity.
+
+### Evening: Reconcile (the core)
+
 ```bash
 75z
+> 4
 ```
-Shows today if complete.
+
+You'll be prompted:
+
+```
+RESULT (1 sentence, concrete):
+→
+
+WHERE ATTENTION HELD (1 sentence):
+→
+
+WHERE IT DRIFTED (optional):
+→
+
+TOMORROW LOCK (1 unavoidable action):
+→
+```
+
+**Rules:**
+- No emotions
+- No stories
+- No explanations
+- If vague → rewrite
+
+This is how inside and outside are forced to match.
+
+### View Mirror
+
+```bash
+75z
+> v
+```
+
+Shows:
+- Today's result
+- Where attention held
+- Tomorrow lock
+
+No stats. No streaks. Mirrors reinforce identity faster than metrics.
+
+### Past Patterns
+
+```bash
+75z
+> p
+```
+
+Past 7 days. Read-only.
+
+You're not looking for productivity.  
+You're looking for drift patterns: where attention leaks, what keeps repeating.
+
+Your nervous system learns by exposure.
+
+### Reset
+
+```bash
+75z
+> r
+```
+
+Delete today's log. Re-read ALIGNMENT.md. Start clean.
+
+Reset = state correction, not failure.
+
+---
+
+## Commands
+
+```
+a - Read ALIGNMENT.md (morning)
+4 - Reconcile (evening)
+v - View today (mirror)
+p - Past 7 days (patterns)
+r - Reset today
+i - Info
+q - Quit
+```
+
+---
+
+## Data Model
+
+```json
+{
+  "date": "2025-12-12",
+  "result": "Wrote and finalized prototype section",
+  "attention": "On removing ambiguity and tightening scope",
+  "drift": "Checked messages twice",
+  "tomorrow": "Review reconciliation API edge cases"
+}
+```
+
+That's enough to bend reality over time.
 
 ---
 
@@ -72,7 +155,7 @@ Shows today if complete.
 
 ```
 ~/75z_logs/YYYY-MM-DD.json  # Raw data
-~/75z_logs/YYYY-MM-DD.md    # Human readable
+~/75z_logs/YYYY-MM-DD.md    # Human mirror
 ```
 
 ### Example Log
@@ -80,33 +163,37 @@ Shows today if complete.
 ```markdown
 # 2025-12-12
 
-**State:** 7/10
-**Focus:** Complete prototype section
+**RESULT:** Wrote and finalized prototype section
 
-**Did:** Removed AI components, wrote 3 pages
-**Shifted:** System is now fully traceable
+**ATTENTION HELD:** On removing ambiguity and tightening scope
+**DRIFT:** Checked messages twice
 
-**Tomorrow:** Review architecture match
+**TOMORROW LOCK:** Review reconciliation API edge cases
 ```
 
 ---
 
-## Daily Alignment
+## What This OS Quietly Enforces
 
-See `ALIGNMENT.md` for the daily prayer/journal entry.
+- You ask as if it's already done → because you write from result
+- You eliminate doubt → because tomorrow is locked
+- You shape attention → because drift is named, not indulged
+- You become consistent → because identity never changes daily
 
-No frameworks. No references. Just return to center.
+This is why it feels like a prayer, but functions like a compiler.
 
 ---
 
-## That's It
+## Philosophy
 
-- No loops
-- No gates  
-- No enforcement
-- No timers
-- No progress bars
+State → Attention → Action → Result
 
-Just: State → Focus → Did → Shifted → Tomorrow
+You never explain this. You write from it.
 
-**Five fields. One cycle. Done.**
+No gates. No enforcement. No complexity.
+
+Just: Inside = Outside
+
+---
+
+**That's it.**
